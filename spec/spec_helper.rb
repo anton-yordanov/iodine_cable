@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "iodine_cable"
+require "support/iodine_helper"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -12,4 +13,8 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  # Custom helpers
+  # IodineHelper define helper mehods for running Iodine server
+  config.include Support::IodineServer, type: :integration
 end

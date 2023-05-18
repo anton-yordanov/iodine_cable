@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type"/>
+  <title>Action Cable</title>
+
+  <script type="text/javascript" src="http://localhost:3001/actioncable.js"></script>
+  <script type="text/javascript">
+    ActionCable.debug = true;
+    const cable = ActionCable.createConsumer('ws://localhost:3001', {
+      connected: () => {
+        console.log("Connected to ActionCable server");
+      },
+      disconnected: (reason) => {
+        console.log("Disconnected from ActionCable server", reason);
+      },
+      rejected: () => {
+        console.log("Rejected from ActionCable server");
+      },
+      received: (data) => {
+        console.log("Received data from ActionCable server", data);
+      },
+      debug: true
+    });
+
+    const appearanceChannel = cable.subscriptions.create('AppearanceChannel', {
+      connected() {
+        console.log("Connected to AppearanceChannel");
+      },
+      disconnected() {
+        console.log("Disconnected from AppearanceChannel");
+      },
+      rejected() {
+        console.log("Subscription rejected for AppearanceChannel");
+      },
+      received(data) {
+        console.log("AppearanceChannel received data", data);
+      }
+    });
+  </script>
+</head>
+<body>
+  <p>Body</p>
+</body>
+</html>
+
+
+
+<!-- function createChatRoomWebsocketConnection(channelId) {
+  //https://medium.com/@valentinowong/using-rails-action-cable-with-a-vanilla-javascript-front-end-1e00ed90067e
+  socket = new WebSocket("ws://localhost:3001/cable");
+  socket.onopen = function (event) {
+    console.log('WebSocket is connected.');
+
+    const msg = {
+      command: 'subscribe',
+      identifier: JSON.stringify({
+        id: channelId,
+        channel: 'AppearanceChannel'
+      }),
+    };
+
+    socket.send(JSON.stringify(msg));
+  };
+
+  socket.onclose = function (event) {
+    console.log('WebSocket is closed.');
+  };
+
+  socket.onmessage = function (event) {
+    const response = event.data;
+    console.log("RESPONSE: ", response);
+    const msg = JSON.parse(response);
+
+    if (msg.type === "ping") {
+      return;
+    } console.log("FROM RAILS: ", msg);
+
+    if (msg.message) {
+      console.log(msg.message)
+    }
+  };
+
+  socket.onerror = function (error) {
+    console.log('WebSocket Error: ' + error);
+  };
+} -->
